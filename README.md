@@ -1,4 +1,4 @@
-# FINN v2: Physics-Informed Neural Networks for Financial Forecasting
+# Physics-Informed Neural Networks for Financial Forecasting
 
 A dissertation codebase asking one fairly stubborn question: do physics constraints from quantitative finance actually help LSTM-based models predict next-day S&P 500 returns, or are they expensive regularisers dressed up as theory?
 
