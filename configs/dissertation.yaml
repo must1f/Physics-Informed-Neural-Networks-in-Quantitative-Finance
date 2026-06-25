@@ -1,0 +1,80 @@
+# FINN v2 — Master Experiment Configuration
+# Single source of truth for all training runs
+
+data:
+  tickers:
+    - "^GSPC"
+  aux_tickers:
+    - "^VIX"
+    - "^TNX"
+  start_date: "2010-01-01"
+  end_date: "2024-12-31"
+  sequence_length: 60
+  split_ratios: [0.70, 0.15, 0.15]  # train / val / test
+
+features:
+  # Returns
+  - log_return
+  # Volatility
+  - rolling_volatility_5
+  - rolling_volatility_20
+  - atr_14
+  - vol_premium
+  # Momentum
+  - momentum_5
+  - momentum_20
+  - rsi_14
+  # Trend/Band
+  - macd
+  - macd_signal
+  - bollinger_lower
+  # Level
+  - close_normalized
+  - volume_normalized
+  # Macro — Fear
+  - vix_level
+  - vix_change
+  - overnight_gap
+  # Macro — Rates
+  - tnx_level
+  - tnx_change
+  # Dropped (21→18): bollinger_upper (ablation Δ=-0.013, VIF=270), simple_return (r=1.0 w/ log_return, VIF=3634), rolling_skewness_20 (MI=0.000)
+
+training:
+  epochs: 200
+  batch_size: 64
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  patience: 20          # early stopping
+  scheduler: "plateau"  # ReduceLROnPlateau
+  scheduler_patience: 10
+  scheduler_factor: 0.5
+  gradient_clip: 0.5
+
+model_defaults:
+  hidden_dim: 128
+  num_layers: 2
+  dropout: 0.2
+  encoder: "lstm"       # default encoder for PINNs
+
+physics:
+  lambdas:
+    gbm: 0.1
+    ou: 0.1
+    bs: 0.01
+    langevin: 0.05
+    hawkes: 0.1
+    hawkes_v2: 0.1
+  warmup_epochs: 20
+  warmup_strategy: "cosine"  # linear | cosine | step
+
+evaluation:
+  transaction_cost: 0.001    # 10 bps
+  risk_free_rate: 0.02
+  trading_days_per_year: 252
+
+seeds: [42, 123, 456]  # multi-seed runs for robustness
+
+walk_forward:
+  test_years: [2018, 2019, 2020, 2021, 2022, 2023]
+  val_months: 4  # must exceed seq_len (60) in trading days: 4 months ≈ 84 days

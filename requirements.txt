@@ -1,0 +1,15 @@
+torch>=2.0
+pandas>=2.0
+numpy>=1.24
+scipy>=1.10
+pyarrow
+yfinance
+pandas-ta
+scikit-learn
+statsmodels
+loguru
+rich
+pyyaml
+tqdm
+matplotlib
+seaborn

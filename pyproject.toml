@@ -1,0 +1,83 @@
+[project]
+name = "finn"
+version = "2.0.0"
+description = "Physics-Informed Neural Networks for Financial Forecasting"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    # Deep Learning
+    "torch>=2.0",
+    "tqdm",
+    # Data
+    "pandas>=2.0",
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "pyarrow",
+    # Finance
+    "yfinance",
+    "pandas-ta",
+    # ML Utilities
+    "scikit-learn",
+    "statsmodels",
+    # Logging
+    "loguru",
+    "rich",
+    # Config
+    "pyyaml",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov",
+    "pytest-asyncio",
+    "httpx",
+    "ruff",
+    "black",
+    "mypy",
+]
+colab = [
+    "torch>=2.0",
+    "pandas>=2.0",
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "yfinance",
+    "pandas-ta",
+    "scikit-learn",
+    "statsmodels",
+    "loguru",
+    "pyyaml",
+    "tqdm",
+    "matplotlib",
+    "seaborn",
+]
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["src*"]
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP"]
+ignore = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-v --tb=short"
+
+[tool.mypy]
+python_version = "3.10"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
